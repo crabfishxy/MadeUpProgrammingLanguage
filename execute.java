@@ -7,22 +7,20 @@ public class execute{
 		if(mua.cmd.get(index+1).charAt(0) == '\"') {
 			String name = mua.cmd.get(index+1).substring(1, mua.cmd.get(index+1).length());
 			//check whether there exists such varibles
-			for(i = 0 ; i < mua.v.size(); i ++) {
-				DataStructure tmp = (DataStructure) mua.v.get(i);
-				if(tmp.name.equals(name)) {
-					tmp.value = mua.cmd.get(index + 2);
-					mua.v.remove(i);
-					mua.v.add(tmp);
+			for(Map.Entry<String, String> entry: mua.v.entrySet()) {
+				String tmpname = entry.getKey();
+				if(tmpname.equals(name)) {
+					String tmpvalue = mua.cmd.get(index + 2);
+					mua.v.put(name, tmpvalue);
 					mua.cmd.remove(index);
 					mua.cmd.remove(index);
 					mua.cmd.remove(index);
 					return 1;
 				}else continue;
 			}
-			DataStructure tmp = new DataStructure();
-			tmp.name = name;
-			tmp.value = mua.cmd.get(index+2);
-			mua.v.addElement(tmp);
+			String tmpname = name;
+			String tmpvalue = mua.cmd.get(index+2);
+			mua.v.put(name, tmpvalue);
 			//update the cmd
 			mua.cmd.remove(index);
 			mua.cmd.remove(index);
@@ -36,17 +34,19 @@ public class execute{
 		int i;
 		String name = mua.cmd.get(index+1);
 		name = name.substring(1, name.length());
-		for(i = 0; i < mua.v.size(); i ++) {
-			DataStructure tmp = (DataStructure) mua.v.get(i);
-			if(tmp.name.equals(name)) {
+		for(Map.Entry<String, String> entry: mua.v.entrySet()) {
+			//DataStructure tmp = (DataStructure) mua.v.get(i);
+			String tmpname = entry.getKey();
+			if(tmpname.equals(name)) {
+				String tmpvalue = entry.getValue();
 				//update the cmd
-				if(tmp.value.charAt(0) == '[') {//the value is a list;
-					String []word = tmp.value.split("\\s++");
+				if(tmpvalue.charAt(0) == '[') {//the value is a list;
+					String []word = tmpvalue.split("\\s++");
 					mua.cmd.remove(index);
 					//check if there is a list in this list
 
-				}else{//the vlue is other
-					mua.cmd.set(index, tmp.value);
+				}else{//the value is other
+					mua.cmd.set(index, tmpvalue);
 					mua.cmd.remove(index+1);
 				}
 
@@ -59,9 +59,9 @@ public class execute{
 	public static int isname(int index) {
 		int i;
 		String name = mua.cmd.get(index+1).substring(1, mua.cmd.get(index+1).length());
-		for(i = 0; i < mua.v.size(); i ++) {
-			DataStructure tmp = (DataStructure) mua.v.get(i);
-			if(tmp.name.equals(name)) {
+		for(Map.Entry<String, String> entry: mua.v.entrySet()) {
+			String tmpname = entry.getKey();
+			if(tmpname.equals(name)) {
 				mua.cmd.set(index, "true");
 				mua.cmd.remove(index + 1);
 				return 1;//
@@ -77,10 +77,10 @@ public class execute{
 	public static int erase(int index) {
 		int i;
 		String name = mua.cmd.get(index+1).substring(1, mua.cmd.get(index+1).length());
-		for(i = 0; i < mua.v.size(); i ++) {
-			DataStructure tmp = (DataStructure) mua.v.get(i);
-			if(tmp.name.equals(name)) {
-				mua.v.remove(i);
+		for(Map.Entry<String, String> entry: mua.v.entrySet()) {
+			String tmpname = entry.getKey();
+			if(tmpname.equals(name)) {
+				mua.v.remove(tmpname);
 				mua.cmd.remove(index);
 				mua.cmd.remove(index);
 				return 1;//success
