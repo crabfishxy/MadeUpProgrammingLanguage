@@ -9,7 +9,7 @@ public class mua{
 		while(true) {
 			System.out.print(">>>");
 			Parse.Read();
-			Parse.Print();
+			//Parse.Print();
 			Parse.Interpret();
 		}
 		

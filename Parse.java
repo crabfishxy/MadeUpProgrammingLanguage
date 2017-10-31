@@ -3,13 +3,20 @@ import java.util.*;
 public class Parse{
 	public static List<String> Read() {
 		int i, j,k;
+		int length = 0;
 		Scanner input=new Scanner(System.in);
 		String line = input.nextLine();
 		String[] word = line.split("\\s++");
-		
+		//deal with "//"
+		for(i = 0; i < word.length; i ++) {
+			if(word[i].substring(0, 1) == "\\") {
+				length = i;
+			}
+			length = i;
+		}
 
 		//transform :a to thing "a
-		for(i = 0; i < word.length; i ++) {
+		for(i = 0; i <= length; i ++) {
 			//translate :<word> to thing <word>
 			if(word[i].charAt(0) == ':') {
 				mua.cmd.add("thing");
@@ -82,7 +89,9 @@ public class Parse{
 			if(Find() == -1)fail = 1;
 			else execute(Find());
 		}
-		
+		if(fail == 1) {
+			clear();
+		}
 	}
 	
 	//find the first operator that can be done
@@ -105,6 +114,7 @@ public class Parse{
 		case "add":
 		case "sub":
 		case "mul":
+		case "div":
 		case "mod":
 		case "eq":
 		case "gt":
@@ -115,6 +125,7 @@ public class Parse{
 			if(!IsOP(mua.cmd.get(index+1)) && !IsOP(mua.cmd.get(index+2)))return true;
 			else return false;
 		}
+		break;
 		case "thing":
 		case "erase":
 		case "isname":
@@ -123,7 +134,11 @@ public class Parse{
 			if(index < mua.cmd.size()-1) {
 			if(!IsOP(mua.cmd.get(index+1)))return true;
 			else return false;
-		}
+		   }
+			break;
+		case "read":
+		case "readlinst":
+		return true;
 		}
 		return false;
 		
@@ -141,6 +156,7 @@ public class Parse{
 		case "add":
 		case "sub":
 		case "mul":
+		case "div":
 		case "mod":
 		case "eq":
 		case "gt":
@@ -180,6 +196,12 @@ public class Parse{
 		case "mul":
 			success = execute.mul(index);
 			break;
+		case "div":
+			success = execute.div(index);
+			break;
+		case "mod":
+			success = execute.mod(index);
+			break;
 		case "eq":
 			success = execute.eq(index);
 			break;
@@ -195,8 +217,21 @@ public class Parse{
 		case "or":
 			success = execute.or(index);
 			break;
+		case "not":
+			success = execute.not(index);
+			break;
+		case "read":
+			success = execute.read(index);
+		    break;
+		case "readlinst":
+			success = execute.readlinst(index);
+			break;
 		}
 		return success;
+	}
+	
+	public static void clear() {
+		mua.cmd.clear();
 	}
 	
 	//for test
